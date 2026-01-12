@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>WasteIDE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="icon.svg">
+<style>
+:root{
+  --bg:#f5f7fa;--bg-end:#e4e7f1;--card:rgba(255,255,255,.6);
+  --text:#2c3e50;--border:rgba(255,255,255,.4);--glow:0 0 0 0 rgba(180,120,255,0);
+  --btn-bg:rgba(255,255,255,.8);--btn-text:#2c3e50;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#121212;--bg-end:#1e1e1e;
+    --card:rgba(35,35,40,.9);--text:#e0e0e0;--border:rgba(120,160,255,.15);
+    --btn-bg:rgba(120,160,255,.15);--btn-text:#e0e0e0;
+  }
+}
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:20px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  background:linear-gradient(135deg,var(--bg),var(--bg-end));color:var(--text);gap:20px;
+}
+.card{
+  width:100%;max-width:800px;padding:40px;border-radius:6px;
+  background:var(--card);border:1px solid var(--border);
+  box-shadow:var(--glow),0 8px 32px rgba(0,0,0,.2);
+  transition:box-shadow .3s ease;
+}
+.card.active{--glow:0 0 20px 5px rgba(180,120,255,.3)}
+h1.name,h2.name{font-size:28px;font-weight:600;margin:0 0 10px}
+.info{margin:6px 0;font-size:16px;opacity:.9}
+.btn-area{margin-top:20px}
+.btn{
+  display:inline-block;padding:12px 24px;border-radius:6px;font-size:15px;
+  background:var(--btn-bg);color:var(--btn-text);border:1px solid var(--border);
+  cursor:pointer;transition:background .2s;
+}
+.btn:hover{background:rgba(180,120,255,.25)}
+textarea.code,
+pre.out{
+  width:100%;min-height:calc(1.2em * 5);padding:12px;border-radius:4px;
+  background:var(--bg);color:var(--text);border:1px solid var(--border);
+  font-family:monospace;font-size:14px;line-height:1.2em;resize:vertical;
+  box-sizing:border-box;
+}
+textarea.code{field-sizing:content}
+pre.out{white-space:pre-wrap;word-break:break-all;margin:0}
+@media (min-width:769px){
+  .card{display:flex;align-items:center;gap:40px;text-align:left}
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div>
+    <h1 class="name">编写代码</h1>
+    <textarea id="src" class="code" placeholder="https://github.com/ChenQingMua/WasteLanguage">#%@+%+%<[[*+]][[+]].---[[+]].>/+*+%:,Hello World</textarea>
+    <div class="btn-area">
+      <button id="runBtn" class="btn">运行</button>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div>
+    <h2 class="name">输出结果</h2>
+    <pre id="out" class="out"></pre>
+  </div>
+</div>
+
+<div class="card">
+  <div>
+    <h2 class="name">代码手册</h2>
+    <p class="info"><strong>&#35;</strong> 初始化或重置指针为0。</p>
+    <p class="info"><strong>&#43;</strong> 指针自加1。</p>
+    <p class="info"><strong>&#45;</strong> 指针自减1。</p>
+    <p class="info"><strong>&#42;</strong> 指针自乘2。</p>
+    <p class="info"><strong>&#47;</strong> 指针自除2。</p>
+    <p class="info"><strong>&#37;</strong> 直接打印指针。</p>
+    <p class="info"><strong>&#46;</strong> 转成字符然后打印指针。</p>
+    <p class="info"><strong>&#58;</strong> 打印换行。</p>
+    <p class="info"><strong>&#63;</strong> 暂停代码1毫秒。</p>
+    <p class="info"><strong>&#33;</strong> 强制终止。</p>
+    <p class="info"><strong>&#64;</strong> 清空输出。</p>
+    <p class="info"><strong>&#44;</strong> 打印后面的代码且不再执行后面的代码。</p>
+    <p class="info"><strong>&#91;&#93;</strong> 里面的代码执行2次。</p>
+    <p class="info"><strong>&#40;&#41;</strong> 50%概率执行里面的代码。</p>
+    <p class="info"><strong>&#123;&#125;</strong> 里面为注释。</p>
+    <p class="info"><strong>&#60;</strong> 存档当前指针。</p>
+    <p class="info"><strong>&#62;</strong> 读取存档并赋值给当前指针。</p>
+    <p class="info"><strong>&#94;</strong> 设置指针为0或1。</p>
+  </div>
+</div>
+
+
+<script type="module">
+import { waste } from './waste.js';
+
+const src=document.getElementById('src'), out=document.getElementById('out');
+document.getElementById('runBtn').addEventListener('click', async ()=>{
+  try{
+    out.textContent='Running';
+    out.textContent=await waste(src.value);
+  }catch(e){
+    out.textContent=e.message;
+  }
+});
+
+[...document.querySelectorAll('.card')].forEach(card=>{
+  const toggle=e=>card.classList.toggle('active',e.type==='mouseenter'||e.type==='touchstart');
+  card.addEventListener('mouseenter',toggle);
+  card.addEventListener('mouseleave',toggle);
+  card.addEventListener('touchstart',toggle);
+  card.addEventListener('touchend',()=>setTimeout(()=>toggle({type:'touchend'}),300));
+});
+</script>
+</body>
+</html>
