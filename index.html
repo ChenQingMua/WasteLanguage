@@ -62,6 +62,7 @@ pre.out{white-space:pre-wrap;word-break:break-all;margin:0}
     <textarea id="src" class="code" placeholder="https://github.com/ChenQingMua/WasteLanguage">#%@+%+%[[*+]][[+]].---[[+]]./*+.:,Hello World</textarea>
     <div class="btn-area">
       <button id="runBtn" class="btn">运行</button>
+      <button id="clBtn" class="btn">清除历史数据 "#&lt;"</button>
     </div>
   </div>
 </div>
@@ -94,18 +95,28 @@ pre.out{white-space:pre-wrap;word-break:break-all;margin:0}
     <p class="info"><strong>&#60;</strong> 存档当前指针。</p>
     <p class="info"><strong>&#62;</strong> 读取存档并赋值给当前指针。</p>
     <p class="info"><strong>&#94;</strong> 设置指针为0或1。</p>
+    <p class="info"><strong>&#38;</strong> 设置断点。</p>
   </div>
 </div>
 
 
 <script type="module">
-import { waste } from './waste.js';
+import { Waste } from './waste.js';
 
+const executor = new Waste();
 const src=document.getElementById('src'), out=document.getElementById('out');
 document.getElementById('runBtn').addEventListener('click', async ()=>{
   try{
     out.textContent='Running';
-    out.textContent=await waste(src.value);
+    out.textContent=await executor.waste(src.value);
+  }catch(e){
+    out.textContent=e.message;
+  }
+});
+document.getElementById('clBtn').addEventListener('click', async ()=>{
+  try{
+    executor.clearHistory();
+    out.textContent='已清除历史数据（相当于#&lt;）';
   }catch(e){
     out.textContent=e.message;
   }
