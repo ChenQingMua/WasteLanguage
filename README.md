@@ -1,9 +1,9 @@
 # WasteLanguage
-这是一个跑在HTML与JS上面的解释器，用于解释一个非常难用的自制语言。
+这是一个跑在HTML与JS上面的解释器。
 
 [在线体验](https://waste.muah.top)
 
-## 代码手册
+# Helper
 
 | 符号 | 功能说明 |
 |------|----------|
