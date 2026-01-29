@@ -1,5 +1,5 @@
 # WasteLanguage
-这是一个跑在HTML与JS上面的解释器。
+这是一个跑在JavaScript上面的解释器。
 
 [在线体验](https://waste.muah.top)
 
