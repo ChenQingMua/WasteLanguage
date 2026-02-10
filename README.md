@@ -1,4 +1,4 @@
-# WasteLanguage
+# WasteLanguage-Preview
 这是一个跑在JavaScript上面的解释器。
 
 [在线体验](https://waste.muah.top)
